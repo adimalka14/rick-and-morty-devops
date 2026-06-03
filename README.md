@@ -207,14 +207,14 @@ Required GitHub secrets: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`
 
 ---
 
-### CD (`cd.yml`) — runs on every push to `main`
+### CD (`cd.yml`) — runs automatically after CI succeeds on `main`
 
 | Step | Description |
 |------|-------------|
 | Create kind cluster | Spins up a local Kubernetes cluster in the runner |
-| Build image | Builds the Docker image |
+| Pull image | Pulls the image from DockerHub (built by CI) |
 | Load image | Loads the image into the kind cluster |
-| Helm deploy | `helm install` with `--create-namespace` |
+| Helm deploy | `helm install` with `--create-namespace` and `imagePullPolicy=Never` |
 | Rollout check | `kubectl rollout status` |
 | Endpoint tests | `curl` on `/healthcheck` and `/data` |
 
