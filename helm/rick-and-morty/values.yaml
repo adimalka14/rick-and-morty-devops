@@ -9,6 +9,7 @@ deployment:
 image:
   repository: adimalka/rick-and-morty-api
   tag: 1.0.0
+  pullPolicy: IfNotPresent
 
 service:
   containerPort: 3000

@@ -7,7 +7,7 @@ spec:
   type: ClusterIP
   selector:
     app: rick-and-morty-api
-    environment: environment
+    environment: development
   ports:
     - port: 80
       targetPort: 3000

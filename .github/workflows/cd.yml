@@ -29,7 +29,8 @@ jobs:
         run: |
           helm install rick-and-morty ./helm/rick-and-morty \
             -n rick-and-morty --create-namespace \
-            --set image.tag=latest
+            --set image.tag=latest \
+            --set image.pullPolicy=Never
 
       - name: Wait for deployment
         run: kubectl rollout status deployment/rick-and-morty-api -n rick-and-morty
