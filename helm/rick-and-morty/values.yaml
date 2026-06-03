@@ -1,0 +1,23 @@
+app:
+  name: rick-and-morty-api
+  namespace: rick-and-morty
+  environment: development
+
+deployment:
+  replicas: 2
+
+image:
+  repository: adimalka/rick-and-morty-api
+  tag: 1.0.0
+
+service:
+  containerPort: 3000
+  healthPath: /healthcheck
+  port: 80
+  type: ClusterIP
+
+ingress:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  className: nginx
+  path: /api/rick-and-morty(/|$)(.*)

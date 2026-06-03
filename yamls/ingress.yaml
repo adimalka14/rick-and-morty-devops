@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rick-and-morty-api
+  namespace: rick-and-morty
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /api/rick-and-morty(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: rick-and-morty-api
+                port:
+                  number: 80

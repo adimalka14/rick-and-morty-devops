@@ -1,0 +1,15 @@
+node_modules
+.DS_Store
+.env
+.dockerignore
+Dockerfile
+README.md
+src/__tests__/**
+dist/**
+coverage/**
+jest-html-reporters-attach/**
+jest.config.js
+eslint.config.js
+.claude
+jest_html_reporters.html
+

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  {{- include "rick-and-morty.metadata" . | nindent 2 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      {{- include "rick-and-morty.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "rick-and-morty.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: rick-and-morty-api
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          ports:
+            - containerPort: {{ .Values.service.containerPort }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.service.healthPath }}
+              port: {{ .Values.service.containerPort }}

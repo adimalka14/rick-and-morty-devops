@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rick-and-morty-api
+  namespace: rick-and-morty
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rick-and-morty-api
+      environment: development
+  template:
+    metadata:
+      labels:
+        app: rick-and-morty-api
+        environment: development
+    spec:
+      containers:
+        - name: rick-and-morty-api
+          image: adimalka/rick-and-morty-api:1.0.0
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 8080
