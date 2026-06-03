@@ -178,6 +178,48 @@ curl http://localhost:3000/data
 
 ---
 
+## CI/CD
+
+The project uses two GitHub Actions workflows:
+
+### CI (`ci.yml`) — runs on every push and PR to `main`
+
+| Step | Description |
+|------|-------------|
+| Install | `npm ci` |
+| Lint | `npm run lint` |
+| Test | `npm run test` |
+| Build | `npm run build` |
+| Docker push | Build and push image to DockerHub (push to `main` only) |
+
+**Docker image tags generated automatically:**
+- `latest` — always points to the latest build on `main`
+- `sha-<short-sha>` — unique tag per commit (e.g. `sha-a1b2c3d`)
+- `1.2.0` / `1.2` — created automatically when a git tag like `v1.2.0` is pushed
+
+To release a new version:
+```bash
+git tag v1.2.0
+git push origin v1.2.0
+```
+
+Required GitHub secrets: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`
+
+---
+
+### CD (`cd.yml`) — runs on every push to `main`
+
+| Step | Description |
+|------|-------------|
+| Create kind cluster | Spins up a local Kubernetes cluster in the runner |
+| Build image | Builds the Docker image |
+| Load image | Loads the image into the kind cluster |
+| Helm deploy | `helm install` with `--create-namespace` |
+| Rollout check | `kubectl rollout status` |
+| Endpoint tests | `curl` on `/healthcheck` and `/data` |
+
+---
+
 ## Running Tests
 
 ```bash
