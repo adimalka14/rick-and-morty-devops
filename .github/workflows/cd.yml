@@ -1,26 +1,25 @@
 name: CD
 
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches: [main]
 
 jobs:
   cd:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
 
       - name: Create kind cluster
         uses: helm/kind-action@v1
         with:
           cluster_name: kind
 
-      - name: Build Docker image
-        run: docker build -t adimalka/rick-and-morty-api:latest .
+      - name: Pull image from DockerHub
+        run: docker pull adimalka/rick-and-morty-api:latest
 
       - name: Load image into kind cluster
         run: kind load docker-image adimalka/rick-and-morty-api:latest
